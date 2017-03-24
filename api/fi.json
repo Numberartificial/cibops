@@ -1,0 +1,20 @@
+{
+    "site-title": "🌮 Taco-demo",
+    "page-title-home": "Eturi",
+    "page-title-settings": "Asetukset",
+    "commits-heading": "Commitit repoon",
+    "stargazers-heading": "Starranneet",
+    "language-selection-heading": "Valkkaa kieli",
+    "current-taco-heading": "Nykyiset tacon täytteet",
+    "status-loading": "Ladataan",
+    "status-network-error": "Netti poikki!",
+    "commits-refresh": "Päivitä",
+    "footer-github-before": "Tsekkaa koodi ja lisää tähti",
+    "footer-github-after": "issa",
+    "timeformat-zero-minutes": "Just äsken",
+    "timeformat-one-minute-ago": "Minsa sitten",
+    "timeformat-n-minutes-ago-before": "",
+    "timeformat-n-minutes-ago-after": "minsaa sitten",
+    "navigation-button-heading": "NavigateTo-nappi",
+    "navigation-button-desc": "Tää alla oleva nappi on demo sille, miten navigaation sivulta toiselle voi tehdä. Tsekkaa miltä src/Pages/Settings.elm sorsat näyttää, ni snaijaat paremmin."
+}
