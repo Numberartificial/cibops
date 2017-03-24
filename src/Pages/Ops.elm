@@ -67,6 +67,8 @@ fetchStargazers =
 fetchPeople : Cmd Msg
 fetchPeople =
     get "http://168.35.6.12:8099/aic/api/people"
+
+    -- get "http://localhost:8099/aic/api/people"
         HandlePeople
         Decoders.decodePeople
 
