@@ -2,7 +2,7 @@ module Decoders exposing (..)
 
 import Date exposing (Date)
 import Json.Decode exposing (Decoder, field, at, string, int, float, dict)
-import Json.Decode.Pipeline exposing (decode, required, requiredAt)
+import Json.Decode.Pipeline exposing (decode, required, requiredAt, optional)
 import Types exposing (..)
 
 
@@ -50,3 +50,14 @@ decodeStargazer =
 decodeStargazerList : Decoder (List Stargazer)
 decodeStargazerList =
     Json.Decode.list decodeStargazer
+
+decodePerson : Decoder Person
+decodePerson =
+    decode Person
+        |> required "name" string
+
+decodePeople : Decoder (People)
+decodePeople =
+    decode People
+        |> optional "content" (Json.Decode.list decodePerson) []
+        |> required "totalElements" int

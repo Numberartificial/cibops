@@ -7,6 +7,7 @@ import RemoteData.Http as Http
 import Html exposing (..)
 import Html.Attributes exposing (href, src)
 import Html.Events exposing (..)
+
 import Styles exposing (..)
 import Types exposing (TacoUpdate(..), Taco, Commit, Stargazer)
 import Decoders
@@ -48,14 +49,14 @@ get =
 
 fetchCommits : Cmd Msg
 fetchCommits =
-    get "https://api.github.com/repos/ohanhi/elm-taco/commits"
+    get "https://api.github.com/repos/Numberartificial/cibops/commits"
         HandleCommits
         Decoders.decodeCommitList
 
 
 fetchStargazers : Cmd Msg
 fetchStargazers =
-    get "https://api.github.com/repos/ohanhi/elm-taco/stargazers"
+    get "https://api.github.com/repos/Numberartificial/cibops/stargazers"
         HandleStargazers
         Decoders.decodeStargazerList
 
@@ -90,9 +91,9 @@ view taco model =
         , Button.button [ Button.attrs [ styles actionButton, onClick ReloadData], Button.info ] [ text "info" ]
         , a
             [ styles appStyles
-            , href "https://github.com/ohanhi/elm-taco/"
+            , href "https://github.com/Numberartificial/cibops/"
             ]
-            [ h2 [] [ text "ohanhi/elm-taco" ] ]
+            [ h2 [] [ text "Numberartificial/cibops" ] ]
         , div []
             [ button
                 [ onClick ReloadData

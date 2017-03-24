@@ -14,6 +14,14 @@ type alias Taco =
     , translations : Translations
     }
 
+type alias Person =
+    { name : String
+    }
+type alias People =
+    {
+      content : List Person 
+    , totalElements : Int
+    }
 
 type alias Commit =
     { userName : String

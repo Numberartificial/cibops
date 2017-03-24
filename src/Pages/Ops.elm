@@ -1,79 +1,226 @@
 module Pages.Ops exposing (..)
 
-import Bootstrap.Button as Button
-import Bootstrap.Dropdown as Dropdown
+import Date exposing (Date)
+import RemoteData exposing (RemoteData(..), WebData)
+import I18n
+import RemoteData.Http as Http
 import Html exposing (..)
-import Html.Attributes exposing (..)
+import Html.Attributes exposing (href, src)
 import Html.Events exposing (..)
+import Json.Decode exposing (..)
 
--- .. etc
+import Styles exposing (..)
+import Types exposing (TacoUpdate(..), Taco, Person, People, Commit, Stargazer)
+import Decoders
+import Bootstrap.Button as Button
 
-main : Program Never Model Msg
-main = program {init=init, view=view, update=update, subscriptions=subscriptions}
-
--- Model
 type alias Model =
-    { myDrop1State : Dropdown.State
-    , myDrop2State : Dropdown.State
+    { commits : WebData (List Commit)
+    , stargazers : WebData (List Stargazer)
+    , people : WebData (People)
     }
 
--- Msg
-type Msg
-    = MyDrop1Msg Dropdown.State
-    | MyDrop2Msg Dropdown.State
 
--- init
-init : (Model, Cmd Msg )
+type Msg
+    = HandleCommits (WebData (List Commit))
+    | HandleStargazers (WebData (List Stargazer))
+    | HandlePeople (WebData (People))
+    | ReloadData
+
+
+init : ( Model, Cmd Msg )
 init =
-    ( { myDrop1State = Dropdown.initialState
-      , myDrop2State = Dropdown.initialState
+    ( { commits = Loading
+      , stargazers = Loading
+      , people = Loading
       }
-    , Cmd.none
+    , fetchData
     )
 
--- update
-update : Msg -> Model -> ( Model, Cmd msg )
+
+fetchData : Cmd Msg
+fetchData =
+    Cmd.batch
+        [ fetchCommits
+        , fetchStargazers
+        -- , fetchPeople
+        ]
+
+get : String -> (WebData success -> Msg) -> Json.Decode.Decoder success -> Cmd Msg
+get =
+    Http.getWithConfig Http.defaultConfig
+
+
+fetchCommits : Cmd Msg
+fetchCommits =
+    get "https://api.github.com/repos/Numberartificial/cibops/commits"
+        HandleCommits
+        Decoders.decodeCommitList
+
+
+fetchStargazers : Cmd Msg
+fetchStargazers =
+    get "https://api.github.com/repos/Numberartificial/cibops/stargazers"
+        HandleStargazers
+        Decoders.decodeStargazerList
+
+fetchPeople : Cmd Msg
+fetchPeople =
+    get "http://168.35.6.12:8099/aic/api/people"
+        HandlePeople
+        Decoders.decodePeople
+
+
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        MyDrop1Msg state ->
-            ( { model | myDrop1State = state }
+        ReloadData ->
+            ( { model
+                | people = Loading
+                , commits = Loading
+                , stargazers = Loading
+              }
+            , fetchData
+            )
+
+        HandleCommits webData ->
+            ( { model | commits = webData }
             , Cmd.none
             )
 
-        MyDrop2Msg state ->
-            ( { model | myDrop2State = state }
+        HandleStargazers webData ->
+            ( { model | stargazers = webData }
             , Cmd.none
             )
 
-        -- ... and cases for the drop down actions
+        HandlePeople webData ->
+            ( { model | people = webData }
+            , Cmd.none
+            )
 
 
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    Sub.batch
-        [ Dropdown.subscriptions model.myDrop1State MyDrop1Msg
-        , Dropdown.subscriptions model.myDrop2State MyDrop2Msg
+view : Taco -> Model -> Html Msg
+view taco model =
+    div []
+        [
+         Button.button [ Button.primary ] [ text "bootstrap" ]
+        , Button.button [ Button.attrs [ styles actionButton, onClick ReloadData], Button.info ] [ text "info" ]
+        , a
+            [ styles appStyles
+            , href "https://github.com/Numberartificial/cibops/"
+            ]
+            [ h2 [] [ text "Numberartificial/cibops" ] ]
+        , div []
+            [ button
+                [ onClick ReloadData
+                , styles actionButton
+                ]
+                [ text ("↻ " ++ I18n.get taco.translations "commits-refresh") ]
+            ]
+        , div [ styles (flexContainer ++ gutterTop) ]
+            [ div [ styles (flex2 ++ gutterRight) ]
+                [ h3 [] [ text (I18n.get taco.translations "commits-heading") ]
+                , viewCommits taco model
+                ]
+            , div [ styles flex1 ]
+                [ h3 [] [ text (I18n.get taco.translations "stargazers-heading") ]
+                , viewStargazers taco model
+                ]
+            ]
         ]
 
 
-view : Model -> Html Msg
-view model =
-    div []
-        [ Dropdown.dropdown
-            model.myDrop1State
-            { options = [ ]
-            , toggleMsg = MyDrop1Msg
-            , toggleButton =
-                Dropdown.toggle [ ] [ text "MyDropdown1" ]
-            , items =
-                [ Dropdown.buttonItem [ onClick <| MyDrop1Msg model.myDrop1State] [ text "Item 1" ]
-                , Dropdown.buttonItem [ onClick <| MyDrop2Msg model.myDrop2State] [ text "Item 2" ]
-                , Dropdown.divider
-                , Dropdown.header [ text "Silly items" ]
-                , Dropdown.buttonItem [ class "disabled" ] [ text "DoNothing1" ]
-                , Dropdown.buttonItem [] [ text "DoNothing2" ]
-                ]
-            }
+viewCommits : Taco -> Model -> Html Msg
+viewCommits taco model =
+    case model.commits of
+        Loading ->
+            text (I18n.get taco.translations "status-loading")
 
-        -- etc
+        Failure _ ->
+            text (I18n.get taco.translations "status-network-error")
+
+        Success commits ->
+            commits
+                |> List.sortBy (\commit -> -(Date.toTime commit.date))
+                |> List.map (viewCommit taco)
+                |> ul [ styles commitList ]
+
+        _ ->
+            text ""
+
+
+viewCommit : Taco -> Commit -> Html Msg
+viewCommit taco commit =
+    li [ styles card ]
+        [ h4 [] [ text commit.userName ]
+        , em [] [ text (formatTimestamp taco commit.date) ]
+        , p [] [ text commit.message ]
+        ]
+
+
+formatTimestamp : Taco -> Date -> String
+formatTimestamp taco date =
+    let
+        timeDiff =
+            taco.currentTime - Date.toTime date
+
+        minutes =
+            floor (timeDiff / 1000 / 60)
+
+        seconds =
+            floor (timeDiff / 1000) % 60
+
+        translate =
+            I18n.get taco.translations
+    in
+        case minutes of
+            0 ->
+                translate "timeformat-zero-minutes"
+
+            1 ->
+                translate "timeformat-one-minute-ago"
+
+            n ->
+                translate "timeformat-n-minutes-ago-before"
+                    ++ " "
+                    ++ toString n
+                    ++ " "
+                    ++ translate "timeformat-n-minutes-ago-after"
+                    ++ " (+"
+                    ++ toString seconds
+                    ++ "s)"
+
+
+viewStargazers : Taco -> Model -> Html Msg
+viewStargazers taco model =
+    case model.stargazers of
+        Loading ->
+            text (I18n.get taco.translations "status-loading")
+
+        Failure _ ->
+            text (I18n.get taco.translations "status-network-error")
+
+        Success stargazers ->
+            stargazers
+                |> List.reverse
+                |> List.map viewStargazer
+                |> ul [ styles commitList ]
+
+        _ ->
+            text ""
+
+
+viewStargazer : Stargazer -> Html Msg
+viewStargazer stargazer =
+    li [ styles (card ++ flexContainer) ]
+        [ img
+            [ styles avatarPicture
+            , src stargazer.avatarUrl
+            ]
+            []
+        , a
+            [ styles stargazerName
+            , href stargazer.url
+            ]
+            [ text stargazer.login ]
         ]

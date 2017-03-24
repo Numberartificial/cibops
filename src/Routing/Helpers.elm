@@ -7,6 +7,7 @@ import UrlParser as Url exposing ((</>))
 type Route
     = HomeRoute
     | SettingsRoute
+    | OpsRoute
     | NotFoundRoute
 
 
@@ -16,15 +17,22 @@ reverseRoute route =
         SettingsRoute ->
             "#/settings"
 
+        HomeRoute ->
+            "#/"
+
+        OpsRoute ->
+            "#/ops"
+
         _ ->
             "#/"
 
 
-routeParser : Url.Parser (Route -> a) a
+routeParser : Url.Parser (Route -> c) c
 routeParser =
     Url.oneOf
         [ Url.map HomeRoute Url.top
         , Url.map SettingsRoute (Url.s "settings")
+        , Url.map OpsRoute (Url.s "ops" )
         ]
 
 

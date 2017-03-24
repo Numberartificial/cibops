@@ -6,6 +6,8 @@ import Html.Attributes exposing (href)
 import Html.Events exposing (..)
 import I18n
 import Navigation exposing (Location)
+
+import Pages.Ops as Ops
 import Pages.Home as Home
 import Pages.Settings as Settings
 import Routing.Helpers exposing (Route(..), parseLocation, reverseRoute)
@@ -14,7 +16,9 @@ import Types exposing (TacoUpdate(..), Taco, Translations)
 
 
 type alias Model =
-    { homeModel : Home.Model
+    {
+      opsModel : Ops.Model
+    , homeModel : Home.Model
     , settingsModel : Settings.Model
     , route : Route
     }
@@ -23,6 +27,7 @@ type alias Model =
 type Msg
     = UrlChange Location
     | NavigateTo Route
+    | OpsMsg Ops.Msg
     | HomeMsg Home.Msg
     | SettingsMsg Settings.Msg
 
@@ -32,14 +37,20 @@ init location =
         ( homeModel, homeCmd ) =
             Home.init
 
+        ( opsModel, opsCmd ) =
+            Ops.init
+
         settingsModel =
             Settings.initModel
     in
         ( { homeModel = homeModel
+          , opsModel = opsModel
           , settingsModel = settingsModel
           , route = parseLocation location
           }
-        , Cmd.map HomeMsg homeCmd
+        , Cmd.batch
+            [ Cmd.map HomeMsg homeCmd
+            , Cmd.map OpsMsg opsCmd]
         )
 
 
@@ -64,6 +75,9 @@ update msg model =
         SettingsMsg settingsMsg ->
             updateSettings model settingsMsg
 
+        OpsMsg msg ->
+            updateOps msg model
+
 
 updateHome : Model -> Home.Msg -> ( Model, Cmd Msg, TacoUpdate )
 updateHome model homeMsg =
@@ -76,6 +90,15 @@ updateHome model homeMsg =
         , NoUpdate
         )
 
+updateOps : Ops.Msg -> Model -> ( Model, Cmd Msg, TacoUpdate )
+updateOps  msg model =
+    let ( nextModel , cmd ) =
+            Ops.update msg model.opsModel
+    in
+        ({ model | opsModel = nextModel }
+        , Cmd.map OpsMsg cmd
+        , NoUpdate
+        )
 
 updateSettings : Model -> Settings.Msg -> ( Model, Cmd Msg, TacoUpdate )
 updateSettings model settingsMsg =
@@ -119,7 +142,7 @@ view taco model =
                 , Button.button
                     [ Button.primary
                     , Button.attrs
-                        [ onClick (NavigateTo HomeRoute)
+                        [ onClick (NavigateTo OpsRoute)
                         , buttonStyles SettingsRoute ]
                     ]
                     [ text "数据统计" ]
@@ -148,6 +171,10 @@ pageView taco model =
             SettingsRoute ->
                 Settings.view taco model.settingsModel
                     |> Html.map SettingsMsg
+
+            OpsRoute ->
+                Ops.view taco model.opsModel
+                    |> Html.map OpsMsg
 
             NotFoundRoute ->
                 h1 [] [ text "404 :(" ]
