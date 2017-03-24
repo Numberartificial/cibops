@@ -43,7 +43,7 @@ fetchData =
     Cmd.batch
         [ fetchCommits
         , fetchStargazers
-        -- , fetchPeople
+        , fetchPeople
         ]
 
 get : String -> (WebData success -> Msg) -> Json.Decode.Decoder success -> Cmd Msg
@@ -119,6 +119,10 @@ view taco model =
             ]
         , div [ styles (flexContainer ++ gutterTop) ]
             [ div [ styles (flex2 ++ gutterRight) ]
+                [ h3 [] [ text "loaded people" ]
+                , viewPeople taco model
+                ]
+            , div [ styles (flex2 ++ gutterRight) ]
                 [ h3 [] [ text (I18n.get taco.translations "commits-heading") ]
                 , viewCommits taco model
                 ]
@@ -157,6 +161,28 @@ viewCommit taco commit =
         , p [] [ text commit.message ]
         ]
 
+viewPeople : Taco -> Model -> Html Msg
+viewPeople taco model =
+    case model.people of
+        Loading ->
+            text "加载中"
+
+        Failure _ ->
+            text "加载失败"
+
+        Success people ->
+            people.content
+                |> List.map (viewPerson taco)
+                |> ul [styles commitList]
+
+        _ ->
+            text ""
+
+viewPerson : Taco -> Person -> Html Msg
+viewPerson taco person =
+   li [ styles card ]
+    [ h4 [] [ text person.name ]
+    ]
 
 formatTimestamp : Taco -> Date -> String
 formatTimestamp taco date =
