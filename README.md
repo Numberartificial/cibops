@@ -2,47 +2,53 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org5446d7b">1. #title</a>
+<li><a href="#orgdf0e3f0">1. #title</a>
 <ul>
-<li><a href="#org784c9b8">1.1. optimize page</a></li>
-<li><a href="#orgc6c179f">1.2. <span class="todo TODO">TODO</span> </a></li>
-<li><a href="#orgdb86b3c">1.3. <span class="done DONE">DONE</span> outline</a>
+<li><a href="#orgce10b5d">1.1. optimize page</a></li>
+<li><a href="#org901dbe8">1.2. <span class="todo TODO">TODO</span> </a></li>
+<li><a href="#org8c04f57">1.3. <span class="done DONE">DONE</span> outline</a>
 <ul>
-<li><a href="#org763b3f5">1.3.1. yes it is outlineo</a></li>
+<li><a href="#orge067eb8">1.3.1. yes it is outlineo</a></li>
 </ul>
 </li>
-<li><a href="#org8e29847">1.4. NEXT</a></li>
-<li><a href="#orge0f697a">1.5. <span class="todo TODO">TODO</span> </a></li>
-<li><a href="#orgf95fd44">1.6. <span class="todo TODO">TODO</span> </a></li>
+<li><a href="#org4ca8353">1.4. NEXT</a></li>
+<li><a href="#org5e69760">1.5. <span class="todo TODO">TODO</span> </a></li>
+<li><a href="#orgc6e580b">1.6. <span class="todo TODO">TODO</span> </a></li>
 </ul>
 </li>
+<li><a href="#org3439339">2. org mode manual</a>
+<ul>
+<li><a href="#orgd0b0ad0">2.1. todo org everyday</a></li>
+</ul>
+</li>
+<li><a href="#orgd0fc398">3. special notice</a></li>
 </ul>
 </div>
 </div>
 
-<a id="org5446d7b"></a>
+<a id="orgdf0e3f0"></a>
 
 # #title
 
 
-<a id="org784c9b8"></a>
+<a id="orgce10b5d"></a>
 
 ## optimize page
 
 
-<a id="orgc6c179f"></a>
+<a id="org901dbe8"></a>
 
 ## 
 
 
-<a id="orgdb86b3c"></a>
+<a id="org8c04f57"></a>
 
 ## outline
 
-[githu](https://github.com/Numberartificial/cibops)
+[githu](https://github.com/Numberartificial/cibops)b
 
 
-<a id="org763b3f5"></a>
+<a id="orge067eb8"></a>
 
 ### yes it is outlineo
 
@@ -50,19 +56,19 @@ iif k
 jifei
 
 
-<a id="org8e29847"></a>
+<a id="org4ca8353"></a>
 
 ## NEXT
 
 <../src/Pages/Ops.elm:41>
 
 
-<a id="orge0f697a"></a>
+<a id="org5e69760"></a>
 
 ## 
 
-\#<a id="org4305256"></a>
-[锚点](#org4305256)
+\#<a id="org2d5bf91"></a>
+[锚点](#org2d5bf91)
 **bold**
 *italic*
 <del>delete</del>
@@ -72,9 +78,14 @@ E = MC<sup>2</sup>
 `git`
 
 
-<a id="orgf95fd44"></a>
+<a id="orgc6e580b"></a>
 
 ## 
+
+
+<a id="org3439339"></a>
+
+# org mode manual
 
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -139,5 +150,17 @@ My
 
 iefe     :ijeif:
 -fefe::iefjie
--fef ::jfiejfie
+-fef ::jfiej
+
+
+<a id="orgd0b0ad0"></a>
+
+## [todo org everyday](./orgman.md)
+
+
+<a id="orgd0fc398"></a>
+
+# special notice
+
+this project is based on [taco](https://github.com/ohanhi/elm-taco) skeleton project, really thanks.
 
