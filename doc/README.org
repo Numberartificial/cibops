@@ -1,0 +1,49 @@
+* plans
+** optimize page
+   SCHEDULED: <2017-03-31 Fri>
+
+*** DONE get familiar with RemoteData function
+remotedata.http use cases: [[../src/Try/ComplicateHttp.elm][ComplicateHttp.elm]]
+CLOSED: [2017-03-27 Mon 16:24]
+
+*** TODO finish complicate http request
+i need to serialize some http requests.
+
+**** TODO make the flat kind realization. 
+SCHEDULED: <2017-03-28 Tue>
+Yes, i am looking for a elegant way to chain a list off
+requests; the examples listed in website are all single
+http request.
+Finally, i found this aritical, [[https://spin.atomicobject.com/2016/10/11/elm-chain-http-requests/][elm-chain-http-requests]],
+plenty of thanks.
+  *NOTE*: i've found several place mismatch with nowadays
+elm 0.18.0 version, and i make these overtime codes comment
+in [[../src/Try/OrdinaryHttp.elm][OrdinaryHttp]].
+Due to this situation, i think /remotedata/ is *over designed* 
+to omit the elm task concept for asynchronous operations.
+
+** DONE outline
+   CLOSED: [2017-03-27 Mon 10:03]
+   [[https://github.com/Numberartificial/cibops][githu]]b
+*** yes it is outlineo
+    iif k
+    jifei
+** NEXT 
+** TODO get familiar with org mode
+*** TODO [[./orgman.org][todo org everyday]]
+#<<anchor>>
+[[anchor][锚点]]
+*bold*
+/italic/
++delete+
+_underline_
+H_2 O
+E = MC^2
+=git=
+*** TODO write more, think more, hesitate or choose less. 
+
+* elm packages
+** ohanhi/remotedata-http
+k
+* special notice
+this project is based on [[https://github.com/ohanhi/elm-taco][taco]] skeleton project, really thanks.
