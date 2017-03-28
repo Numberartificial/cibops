@@ -19,18 +19,24 @@ plenty of thanks.
   *NOTE*: i've found several place mismatch with nowadays
 elm 0.18.0 version, and i make these overtime codes comment
 in [[../src/Try/OrdinaryHttp.elm][OrdinaryHttp]].
-Due to this situation, i think /remotedata/ is *over designed* 
+Due to this situation, i think /remotedata/http/ is *over designed* 
 to omit the elm task concept for asynchronous operations.
+<2017-03-28 Tue 11:23>
+
+**** TODO chain requests demo 
+
+
+**** TODO core concept in RemoteData
+It's very clearly that RemoteData is a abstraction of
+Model, not Cmd or Msg.
 
 ** DONE outline
    CLOSED: [2017-03-27 Mon 10:03]
-   [[https://github.com/Numberartificial/cibops][githu]]b
-*** yes it is outlineo
-    iif k
-    jifei
+   [[https://github.com/Numberartificial/cibops][github]]
+*** yes it is outline
 ** NEXT 
 ** TODO get familiar with org mode
-*** TODO [[./orgman.org][todo org everyday]]
+*** TODO [[./orgman.org][todo org]] everyday
 #<<anchor>>
 [[anchor][锚点]]
 *bold*

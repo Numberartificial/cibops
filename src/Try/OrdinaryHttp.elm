@@ -57,13 +57,24 @@ fetchTask : Task Http.Error String
 fetchTask =
     Http.get url decode |> Http.toTask
 
+fetch1 : Task Http.Error String
+fetch1 =
+    Http.get "http://168.35.6.12:8099/aic/api/people?page=1" decode
+        |> Http.toTask
+
+fetch0 : Task Http.Error String
+fetch0 =
+    Http.get "http://168.35.6.12:8099/aic/api/people?page=0" decode
+        |> Http.toTask
+
 {-| Task.perform Never make a error of Result,opposite to it,
      attempt will handle a result of (Result error a) which may fail in
      elm runtime-}
 fetchCmd : Cmd Msg
 fetchCmd =
     -- Task.perform FetchSuccess fetchTask
-    Task.attempt FetchMsg fetchTask
+    Task.attempt FetchMsg (fetch0
+                          |> Task.andThen (\n -> fetch1))
 
 
 
