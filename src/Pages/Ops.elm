@@ -50,6 +50,7 @@ get : String -> (WebData success -> Msg) -> Json.Decode.Decoder success -> Cmd M
 get =
     Http.getWithConfig Http.defaultConfig
 
+        
 
 fetchCommits : Cmd Msg
 fetchCommits =
@@ -240,7 +241,7 @@ viewStargazers taco model =
 
 viewStargazer : Stargazer -> Html Msg
 viewStargazer stargazer =
-    li [ styles (card ++ flexContainer) ]
+    li [ styles (card ++ flexContainer) 
         [ img
             [ styles avatarPicture
             , src stargazer.avatarUrl
