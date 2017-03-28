@@ -44,6 +44,5 @@ E = MC^2
 
 * elm packages
 ** ohanhi/remotedata-http
-k
 * special notice
 this project is based on [[https://github.com/ohanhi/elm-taco][taco]] skeleton project, really thanks.
