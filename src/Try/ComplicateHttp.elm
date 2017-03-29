@@ -10,7 +10,7 @@ import Decoders
 
 
 main =
-    Html.program
+    html.program
         { init = init
         , update = update
         , view = view

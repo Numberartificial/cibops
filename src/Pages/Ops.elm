@@ -14,6 +14,8 @@ import Types exposing (TacoUpdate(..), Taco, Person, People, Commit, Stargazer)
 import Decoders
 import Bootstrap.Button as Button
 
+
+
 type alias Model =
     { commits : WebData (List Commit)
     , stargazers : WebData (List Stargazer)
@@ -46,11 +48,11 @@ fetchData =
         , fetchPeople
         ]
 
+
 get : String -> (WebData success -> Msg) -> Json.Decode.Decoder success -> Cmd Msg
 get =
     Http.getWithConfig Http.defaultConfig
 
-        
 
 fetchCommits : Cmd Msg
 fetchCommits =
@@ -65,11 +67,11 @@ fetchStargazers =
         HandleStargazers
         Decoders.decodeStargazerList
 
+
 fetchPeople : Cmd Msg
 fetchPeople =
-    get "http://168.35.6.12:8099/aic/api/people"
-
     -- get "http://localhost:8099/aic/api/people"
+    get "http://168.35.6.12:8099/aic/api/people"
         HandlePeople
         Decoders.decodePeople
 
@@ -164,6 +166,8 @@ viewCommit taco commit =
         , p [] [ text commit.message ]
         ]
 
+
+
 viewPeople : Taco -> Model -> Html Msg
 viewPeople taco model =
     case model.people of
@@ -181,11 +185,13 @@ viewPeople taco model =
         _ ->
             text ""
 
+
 viewPerson : Taco -> Person -> Html Msg
 viewPerson taco person =
    li [ styles card ]
     [ h4 [] [ text person.name ]
     ]
+
 
 formatTimestamp : Taco -> Date -> String
 formatTimestamp taco date =
@@ -241,7 +247,7 @@ viewStargazers taco model =
 
 viewStargazer : Stargazer -> Html Msg
 viewStargazer stargazer =
-    li [ styles (card ++ flexContainer) 
+    li [ styles (card ++ flexContainer) ]
         [ img
             [ styles avatarPicture
             , src stargazer.avatarUrl

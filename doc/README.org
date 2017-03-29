@@ -24,8 +24,36 @@ to omit the elm task concept for asynchronous operations.
 <2017-03-28 Tue 11:23>
 
 **** TODO chain requests demo 
+     
+***** DONE there is a elm error                                         :bug:
+      CLOSED: [2017-03-29 Wed 14:02]
+     ``` elm-make src/Main.elm
+-- SYNTAX PROBLEM ------------------------------------------ ./src/Pages/Ops.elm
+
+I need whitespace, but got stuck on what looks like a new declaration. You are
+either missing some stuff in the declaration above or just need to add some
+spaces here:
 
 
+I am looking for one of the following things:
+
+    whitespace
+```
+<2017-03-29 Wed 13:59>
+i am looking for this weird problem.
+
+i found this commit, thanks for git:
+``` @@ -240,7 +241,7 @@ viewStargazers taco model =
+  
+  viewStargazer : Stargazer -> Html Msg
+  viewStargazer stargazer =
+ -    li [ styles (card ++ flexContainer) ]
+ +    li [ styles (card ++ flexContainer) 
+          [ img
+              [ styles avatarPicture
+              , src stargazer.avatarUrl
+``` 
+but, this compile warning is ambiguity.
 **** TODO core concept in RemoteData
 It's very clearly that RemoteData is a abstraction of
 Model, not Cmd or Msg.

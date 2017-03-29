@@ -6,6 +6,9 @@ import Http
 import Task exposing (Task)
 import Json.Decode as Decode
 
+import Types exposing (People)
+import Decoders exposing (decodePeople)
+
 
 -- MODEL
 
@@ -75,6 +78,7 @@ fetchCmd =
     -- Task.perform FetchSuccess fetchTask
     Task.attempt FetchMsg (fetch0
                           |> Task.andThen (\n -> fetch1))
+
 
 
 
