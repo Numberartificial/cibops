@@ -24,7 +24,16 @@ to omit the elm task concept for asynchronous operations.
 <2017-03-28 Tue 11:23>
 
 **** TODO chain requests demo 
+   
+***** TODO {while condition} pattern http requests chain
+      i need to get a bunch of requests while response is legal.
+
+      now i have:
+      1. Task
+      2. andThen
      
+      taco is something bad for reuse function to
+      express a UI component.
 ***** DONE there is a elm error                                         :bug:
       CLOSED: [2017-03-29 Wed 14:02]
      ``` elm-make src/Main.elm
