@@ -1,3 +1,5 @@
+module Pages.Ops exposing (..)
+
 import Date exposing (Date)
 import RemoteData exposing (RemoteData(..), WebData)
 import I18n
