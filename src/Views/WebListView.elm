@@ -4,9 +4,11 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import Http
+
 import Bootstrap.Card as Card
 import Bootstrap.ListGroup as ListGroup
 import RemoteData exposing (WebData, RemoteData(..))
+
 import Views.WebDataView exposing (..)
 import Effects.Web exposing (fetchCmd)
 import Types exposing (People, Person)
