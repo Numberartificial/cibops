@@ -8,7 +8,6 @@ import Task exposing (Task)
 import Json.Decode as Decode
 import RemoteData exposing (WebData, RemoteData(..))
 import Bootstrap.ListGroup as BList exposing (..)
-
 import Views.WebDataView exposing (..)
 import Styles exposing (..)
 import Types exposing (People, Person)
@@ -134,8 +133,10 @@ update msg model =
             ( { model | people = Success res }, Cmd.none )
 
         FetchMsg (Err error) ->
-            ( { model | people = Failure error
-              , title = toString error }
+            ( { model
+                | people = Failure error
+                , title = toString error
+              }
             , Cmd.none
             )
 

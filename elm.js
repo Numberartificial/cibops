@@ -17694,13 +17694,12 @@ var _ohanhi$elm_taco$Pages_Ops$view = F2(
 													{ctor: '[]'},
 													{
 														ctor: '::',
-														_0: _elm_lang$html$Html$text(
-															A2(_ohanhi$elm_taco$I18n$get, taco.translations, 'commits-heading')),
+														_0: _elm_lang$html$Html$text('loaded people'),
 														_1: {ctor: '[]'}
 													}),
 												_1: {
 													ctor: '::',
-													_0: A2(_ohanhi$elm_taco$Pages_Ops$viewCommits, taco, model),
+													_0: A2(_ohanhi$elm_taco$Pages_Ops$viewPeople, taco, model),
 													_1: {ctor: '[]'}
 												}
 											}),
@@ -17787,7 +17786,11 @@ var _ohanhi$elm_taco$Pages_Ops$fetchData = _elm_lang$core$Platform_Cmd$batch(
 		_1: {
 			ctor: '::',
 			_0: _ohanhi$elm_taco$Pages_Ops$fetchStargazers,
-			_1: {ctor: '[]'}
+			_1: {
+				ctor: '::',
+				_0: _ohanhi$elm_taco$Pages_Ops$fetchPeople,
+				_1: {ctor: '[]'}
+			}
 		}
 	});
 var _ohanhi$elm_taco$Pages_Ops$init = {

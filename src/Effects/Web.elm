@@ -1,9 +1,8 @@
-module Effects.Web exposing(..)
+module Effects.Web exposing (..)
 
 import Html exposing (..)
 import Http
 import Task exposing (Task)
-
 import Types exposing (People, Person)
 import Decoders exposing (decodePeople)
 
@@ -30,4 +29,3 @@ fetchCmd msg =
         (fetch0
             |> Task.andThen (\n -> fetch1)
         )
-

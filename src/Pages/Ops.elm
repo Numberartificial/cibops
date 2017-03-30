@@ -8,25 +8,23 @@ import Html exposing (..)
 import Html.Attributes exposing (href, src)
 import Html.Events exposing (..)
 import Json.Decode exposing (..)
-
 import Styles exposing (..)
 import Types exposing (TacoUpdate(..), Taco, Person, People, Commit, Stargazer)
 import Decoders
 import Bootstrap.Button as Button
 
 
-
 type alias Model =
     { commits : WebData (List Commit)
     , stargazers : WebData (List Stargazer)
-    , people : WebData (People)
+    , people : WebData People
     }
 
 
 type Msg
     = HandleCommits (WebData (List Commit))
     | HandleStargazers (WebData (List Stargazer))
-    | HandlePeople (WebData (People))
+    | HandlePeople (WebData People)
     | ReloadData
 
 
@@ -107,9 +105,8 @@ update msg model =
 view : Taco -> Model -> Html Msg
 view taco model =
     div []
-        [
-         Button.button [ Button.primary ] [ text "bootstrap" ]
-        , Button.button [ Button.attrs [ styles actionButton, onClick ReloadData], Button.info ] [ text "info" ]
+        [ Button.button [ Button.primary ] [ text "bootstrap" ]
+        , Button.button [ Button.attrs [ styles actionButton, onClick ReloadData ], Button.info ] [ text "info" ]
         , a
             [ styles appStyles
             , href "https://github.com/Numberartificial/cibops/"
@@ -167,7 +164,6 @@ viewCommit taco commit =
         ]
 
 
-
 viewPeople : Taco -> Model -> Html Msg
 viewPeople taco model =
     case model.people of
@@ -180,7 +176,7 @@ viewPeople taco model =
         Success people ->
             people.content
                 |> List.map (viewPerson taco)
-                |> ul [styles commitList]
+                |> ul [ styles commitList ]
 
         _ ->
             text ""
@@ -188,9 +184,9 @@ viewPeople taco model =
 
 viewPerson : Taco -> Person -> Html Msg
 viewPerson taco person =
-   li [ styles card ]
-    [ h4 [] [ text person.name ]
-    ]
+    li [ styles card ]
+        [ h4 [] [ text person.name ]
+        ]
 
 
 formatTimestamp : Taco -> Date -> String
