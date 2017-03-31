@@ -3,29 +3,59 @@ module Effects.Web exposing (..)
 import Html exposing (..)
 import Http
 import Task exposing (Task)
+
+import Json.Decode exposing (Decoder, field, at, string, int, float, dict)
+import Json.Decode.Pipeline exposing (decode, required, requiredAt, optional)
+
 import Types exposing (People, Person)
 import Decoders exposing (decodePeople)
+import RemoteData.Http exposing (..)
 
 
-fetch1 : Task Http.Error People
-fetch1 =
-    Http.get "http://168.35.6.12:8099/aic/api/people?page=1" decodePeople
-        |> Http.toTask
+configPeople : Config
+configPeople =
+    { headers = []
+    , withCredentials = False
+    , timeout = Nothing
+    }
 
 
-fetch0 : Task Http.Error People
-fetch0 =
-    Http.get "http://168.35.6.12:8099/aic/api/people?page=0" decodePeople
-        |> Http.toTask
+type alias Person =
+    { name : String
+    }
+
+type alias Corporation =
+    { name : String
+    }
+
+type alias People =
+    { page : Int
+    , size : Int
+    , content : List Person
+    }
 
 
-{-| Task.perform Never make a error of Result,opposite to it,
-     attempt will handle a result of (Result error a) which may fail in
-     elm runtime
--}
-fetchCmd msg =
-    -- Task.perform FetchSuccess fetchTask
-    Task.attempt msg
-        (fetch0
-            |> Task.andThen (\n -> fetch1)
-        )
+decodePerson : Decoder Person
+decodePerson =
+    decode Person
+        |> required "name" string
+
+
+
+
+decodePeople : Decoder People
+decodePeople =
+    decode People
+        |> optional "page" int 0
+        |> optional "size" int 20
+        |> optional "content" (Json.Decode.list decodePerson) []
+
+
+decodeCorporation : Decoder Corporation
+decodeCorporation =
+    decode Corporation
+        |> required "name" string
+
+
+type alias AuditList =
+    { total : Int }

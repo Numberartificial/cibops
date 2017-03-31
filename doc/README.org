@@ -34,6 +34,10 @@ to omit the elm task concept for asynchronous operations.
      
       taco is something bad for reuse function to
       express a UI component.
+
+      taco maybe a misunderstanding of reusable and reliable function.
+      i don't wanna use this taco pattern.
+
 ***** DONE there is a elm error                                         :bug:
 
       CLOSED: [2017-03-29 Wed 14:02]
