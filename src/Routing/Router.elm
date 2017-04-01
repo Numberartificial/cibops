@@ -219,3 +219,10 @@ pageView taco model =
                 h1 [] [ text "404 :(" ]
           )
         ]
+
+
+--SUBSCRIPTTIONS
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.batch
+        [ Sub.map CibMsg (Cib.sub model.cibModel) ]
