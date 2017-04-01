@@ -184,9 +184,9 @@ view taco model =
                 ]
             , pageView taco model
             , footer [ styles footerSection ]
-                [ text (translate "footer-github-before" ++ " ")
+                [ text "Project homepage is : "
                 , a
-                    [ href "https://github.com/ohanhi/elm-taco/"
+                    [ href "https://github.com/Numberartificial/cibops"
                     , styles footerLink
                     ]
                     [ text "Github" ]

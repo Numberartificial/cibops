@@ -12,7 +12,7 @@ import Bootstrap.Button as Button exposing (..)
 import Bootstrap.Dropdown as Dropdown exposing (..)
 
 import Views.WebListView as ListView
-import Effects.Web as Resource exposing (..)
+import Effects.Web as Resource 
 
 
 -- MODEL
@@ -20,7 +20,7 @@ import Effects.Web as Resource exposing (..)
 
 type alias Model =
     { drop : Dropdown.State
-    , people : ListView.Model Person
+    , people : ListView.Model Resource.Person
     }
 
 
@@ -42,14 +42,14 @@ init =
         )
 
 
-
 -- UPDATE
 
 
 type Msg
     = DropMsg Dropdown.State
     | FetchPeople
-    | PeopleMsg (ListView.Msg Person)
+    | PeopleMsg (ListView.Msg Resource.Person)
+    | DropClick String String
 
 
 mapWebData : (a -> b) -> WebData a -> WebData b
@@ -68,6 +68,17 @@ mapWebData f webData =
             Loading
 
 
+fetchPeople url =
+    getWithConfig defaultConfig
+        url
+        ((\wedata ->
+            mapWebData
+                (\people -> people.content)
+                wedata
+                |> ListView.FetchMsg
+         )
+        )
+        Resource.decodePeople
 fetch =
     getWithConfig defaultConfig
         "http://168.35.6.12:8099/aic/api/people"
@@ -78,15 +89,26 @@ fetch =
                 |> ListView.FetchMsg
          )
         )
-        decodePeople
+        Resource.decodePeople
+
+
+host : String
+host = "http://168.35.6.12:8099"
+
+
+makeUrl : String -> String -> String -> String
+makeUrl host source data =
+    String.join "/" [ host, source, "api", data  ]
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         DropMsg state ->
-            Tuple.mapFirst (\model -> { model | drop = state }) <|
-                updatePeople model ListView.Fetch
+            -- Tuple.mapFirst (\model -> { model | drop = state }) <|
+                -- updatePeople model ListView.Fetch
+            ( {model | drop = state }
+            , Cmd.none )
 
         FetchPeople ->
             updatePeople model ListView.Fetch
@@ -94,8 +116,21 @@ update msg model =
         PeopleMsg peopleMsg ->
             updatePeople model peopleMsg
 
+        DropClick source data ->
+            updateList (makeUrl host source data)  (model)
 
-updatePeople : Model -> ListView.Msg Person -> ( Model, Cmd Msg )
+
+updateList : String -> Model -> ( Model, Cmd Msg )
+updateList url model =
+    let
+        ( nextModel, nextCmd ) =
+            ListView.update (fetchPeople url) ListView.Fetch model.people
+    in
+        ( { model | people = nextModel }
+        , Cmd.map PeopleMsg nextCmd )
+
+
+updatePeople : Model -> ListView.Msg Resource.Person -> ( Model, Cmd Msg )
 updatePeople model msg =
     let
         ( nextModel, nextCmd ) =
@@ -135,10 +170,13 @@ viewDrop model =
             { options = [ Dropdown.alignMenuRight ]
             , toggleMsg = DropMsg
             , toggleButton =
-                Dropdown.toggle [ Button.roleLink ] [ text "datasource" ]
+                Dropdown.toggle [ Button.roleLink ]
+                    [ text <| String.join "/" ["source", "resource"]
+                    ]
             , items =
                 [ Dropdown.buttonItem [ onClick FetchPeople ] [ text "fetch people" ]
-                , Dropdown.buttonItem [ onClick FetchPeople ] [ text "Item 2" ]
+                , Dropdown.buttonItem [ onClick <| (DropClick "aic" "people") ] [ text "Item 2" ]
+                , Dropdown.buttonItem [ onClick <| (DropClick "shixin" "people") ] [ text <| String.join "/"["shixin" , "person"]]
                 , Dropdown.divider
                 , Dropdown.header [ text "Silly items" ]
                 , Dropdown.buttonItem [ class "disabled" ] [ text "DoNothing1" ]
@@ -149,7 +187,7 @@ viewDrop model =
         ]
 
 
-viewPerson : Person -> Html Msg
+viewPerson : Resource.Person -> Html Msg
 viewPerson person =
     div []
         [ text (toString person.name) ]
