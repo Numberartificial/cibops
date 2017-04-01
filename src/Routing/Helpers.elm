@@ -8,6 +8,7 @@ type Route
     = HomeRoute
     | SettingsRoute
     | OpsRoute
+    | CibRoute
     | NotFoundRoute
 
 
@@ -23,6 +24,9 @@ reverseRoute route =
         OpsRoute ->
             "#/ops"
 
+        CibRoute ->
+            "#/cib"
+
         _ ->
             "#/"
 
@@ -33,6 +37,7 @@ routeParser =
         [ Url.map HomeRoute Url.top
         , Url.map SettingsRoute (Url.s "settings")
         , Url.map OpsRoute (Url.s "ops" )
+        , Url.map CibRoute (Url.s "cib" )
         ]
 
 

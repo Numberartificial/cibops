@@ -7,6 +7,8 @@ import Html.Events exposing (..)
 import I18n
 import Navigation exposing (Location)
 
+
+import Pages.CibFetch as Cib
 import Pages.Ops as Ops
 import Pages.Home as Home
 import Pages.Settings as Settings
@@ -16,8 +18,8 @@ import Types exposing (TacoUpdate(..), Taco, Translations)
 
 
 type alias Model =
-    {
-      opsModel : Ops.Model
+    { cibModel : Cib.Model
+    , opsModel : Ops.Model
     , homeModel : Home.Model
     , settingsModel : Settings.Model
     , route : Route
@@ -27,13 +29,17 @@ type alias Model =
 type Msg
     = UrlChange Location
     | NavigateTo Route
+    | CibMsg Cib.Msg
     | OpsMsg Ops.Msg
     | HomeMsg Home.Msg
     | SettingsMsg Settings.Msg
 
+
 init : Location -> ( Model, Cmd Msg )
 init location =
     let
+        ( cibModel, cibCmd ) =
+            Cib.init
         ( homeModel, homeCmd ) =
             Home.init
 
@@ -43,14 +49,17 @@ init location =
         settingsModel =
             Settings.initModel
     in
-        ( { homeModel = homeModel
+        ( { cibModel = cibModel
+          , homeModel = homeModel
           , opsModel = opsModel
           , settingsModel = settingsModel
           , route = parseLocation location
           }
         , Cmd.batch
             [ Cmd.map HomeMsg homeCmd
-            , Cmd.map OpsMsg opsCmd]
+            , Cmd.map OpsMsg opsCmd
+            , Cmd.map CibMsg cibCmd
+            ]
         )
 
 
@@ -78,6 +87,9 @@ update msg model =
         OpsMsg msg ->
             updateOps msg model
 
+        CibMsg msg ->
+            updateCib msg model
+
 
 updateHome : Model -> Home.Msg -> ( Model, Cmd Msg, TacoUpdate )
 updateHome model homeMsg =
@@ -90,15 +102,29 @@ updateHome model homeMsg =
         , NoUpdate
         )
 
+
 updateOps : Ops.Msg -> Model -> ( Model, Cmd Msg, TacoUpdate )
-updateOps  msg model =
-    let ( nextModel , cmd ) =
+updateOps msg model =
+    let
+        ( nextModel, cmd ) =
             Ops.update msg model.opsModel
     in
-        ({ model | opsModel = nextModel }
+        ( { model | opsModel = nextModel }
         , Cmd.map OpsMsg cmd
         , NoUpdate
         )
+
+updateCib : Cib.Msg -> Model -> ( Model, Cmd Msg, TacoUpdate)
+updateCib msg model =
+    let
+        ( nextModel, cmd ) =
+            Cib.update msg model.cibModel
+    in
+        ( { model | cibModel = nextModel}
+        , Cmd.map CibMsg cmd
+        , NoUpdate
+        )
+
 
 updateSettings : Model -> Settings.Msg -> ( Model, Cmd Msg, TacoUpdate )
 updateSettings model settingsMsg =
@@ -143,9 +169,18 @@ view taco model =
                     [ Button.primary
                     , Button.attrs
                         [ onClick (NavigateTo OpsRoute)
-                        , buttonStyles SettingsRoute ]
+                        , buttonStyles SettingsRoute
+                        ]
                     ]
                     [ text "数据统计" ]
+                , Button.button
+                    [ Button.primary
+                    , Button.attrs
+                        [ onClick (NavigateTo CibRoute)
+                        , buttonStyles SettingsRoute
+                        ]
+                    ]
+                    [ text "Cib Fetch" ]
                 ]
             , pageView taco model
             , footer [ styles footerSection ]
@@ -175,6 +210,10 @@ pageView taco model =
             OpsRoute ->
                 Ops.view taco model.opsModel
                     |> Html.map OpsMsg
+
+            CibRoute ->
+                Cib.view model.cibModel
+                    |> Html.map CibMsg
 
             NotFoundRoute ->
                 h1 [] [ text "404 :(" ]
