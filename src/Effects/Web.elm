@@ -70,4 +70,9 @@ decodeCorporations =
         |> optional "content" (Json.Decode.list decodeCorporation) []
 
 type alias AuditList =
-    { total : Int }
+    { total : Int
+    , page : Int
+    , size : Int
+    , number : Int
+    }
+
