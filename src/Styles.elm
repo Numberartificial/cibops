@@ -45,7 +45,7 @@ colorText =
 
 colorSalsa : Color
 colorSalsa =
-    hex "fff090"
+    hex "ff6347"
 
 
 colorTaco : Color

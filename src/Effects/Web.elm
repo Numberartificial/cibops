@@ -34,6 +34,11 @@ type alias People =
     , content : List Person
     }
 
+type alias Corporations =
+    { page : Int
+    , size : Int
+    , content : List Corporation
+    }
 
 decodePerson : Decoder Person
 decodePerson =
@@ -56,6 +61,13 @@ decodeCorporation =
     decode Corporation
         |> required "name" string
 
+
+decodeCorporations : Decoder Corporations
+decodeCorporations =
+    decode Corporations
+        |> optional "page" int 0
+        |> optional "size" int 20
+        |> optional "content" (Json.Decode.list decodeCorporation) []
 
 type alias AuditList =
     { total : Int }

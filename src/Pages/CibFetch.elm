@@ -68,6 +68,19 @@ mapWebData f webData =
             Loading
 
 
+fetchCorporations url =
+    getWithConfig defaultConfig
+        url
+        ((\wedata ->
+            mapWebData
+                (\res -> res.content)
+                wedata
+                |> ListView.FetchMsg
+         )
+        )
+        Resource.decodeCorporations
+
+
 fetchPeople url =
     getWithConfig defaultConfig
         url
@@ -79,6 +92,8 @@ fetchPeople url =
          )
         )
         Resource.decodePeople
+
+
 fetch =
     getWithConfig defaultConfig
         "http://168.35.6.12:8099/aic/api/people"
@@ -90,6 +105,21 @@ fetch =
          )
         )
         Resource.decodePeople
+
+type Host =
+    Host String
+
+
+type Source =
+    Source String
+
+type Data =
+    People String
+    | Corporations String
+
+
+type DataSource =
+    DataSource Host Data Source
 
 
 host : String
@@ -117,14 +147,14 @@ update msg model =
             updatePeople model peopleMsg
 
         DropClick source data ->
-            updateList (makeUrl host source data)  (model)
+            updateList host source data  (model)
 
 
-updateList : String -> Model -> ( Model, Cmd Msg )
-updateList url model =
+updateList : String -> String -> String -> Model -> ( Model, Cmd Msg )
+updateList host source data model =
     let
         ( nextModel, nextCmd ) =
-            ListView.update (fetchPeople url) ListView.Fetch model.people
+            ListView.update (fetchPeople (makeUrl host source data)) ListView.Fetch model.people
     in
         ( { model | people = nextModel }
         , Cmd.map PeopleMsg nextCmd )
@@ -177,6 +207,7 @@ viewDrop model =
                 [ Dropdown.buttonItem [ onClick FetchPeople ] [ text "fetch people" ]
                 , Dropdown.buttonItem [ onClick <| (DropClick "aic" "people") ] [ text "Item 2" ]
                 , Dropdown.buttonItem [ onClick <| (DropClick "shixin" "people") ] [ text <| String.join "/"["shixin" , "person"]]
+                , Dropdown.buttonItem [ onClick <| (DropClick "shixin" "corporations") ] [ text <| String.join "/"["shixin" , "corporation"]]
                 , Dropdown.divider
                 , Dropdown.header [ text "Silly items" ]
                 , Dropdown.buttonItem [ class "disabled" ] [ text "DoNothing1" ]
