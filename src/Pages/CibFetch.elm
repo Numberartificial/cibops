@@ -1,6 +1,6 @@
 module Pages.CibFetch exposing (..)
 
-import Bootstrap.Button as Button exposing (..)
+import Bootstrap.Button as Button 
 import Bootstrap.Card as Card
 import Bootstrap.Dropdown as Dropdown exposing (..)
 import Bootstrap.Form.Input as Input

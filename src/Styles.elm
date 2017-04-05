@@ -83,7 +83,6 @@ buttonBase =
         , cursor pointer
         ]
 
-
 navigationButtonBase : Mixin
 navigationButtonBase =
     mixin
