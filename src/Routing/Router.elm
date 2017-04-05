@@ -6,8 +6,6 @@ import Html.Attributes exposing (href)
 import Html.Events exposing (..)
 import I18n
 import Navigation exposing (Location)
-
-
 import Pages.CibFetch as Cib
 import Pages.Ops as Ops
 import Pages.Home as Home
@@ -15,6 +13,8 @@ import Pages.Settings as Settings
 import Routing.Helpers exposing (Route(..), parseLocation, reverseRoute)
 import Styles exposing (..)
 import Types exposing (TacoUpdate(..), Taco, Translations)
+import Material
+import Material.Layout as Layout
 
 
 type alias Model =
@@ -23,6 +23,7 @@ type alias Model =
     , homeModel : Home.Model
     , settingsModel : Settings.Model
     , route : Route
+    , mdl : Material.Model
     }
 
 
@@ -33,6 +34,7 @@ type Msg
     | OpsMsg Ops.Msg
     | HomeMsg Home.Msg
     | SettingsMsg Settings.Msg
+    | Mdl (Material.Msg Msg)
 
 
 init : Location -> ( Model, Cmd Msg )
@@ -40,6 +42,7 @@ init location =
     let
         ( cibModel, cibCmd ) =
             Cib.init
+
         ( homeModel, homeCmd ) =
             Home.init
 
@@ -54,11 +57,13 @@ init location =
           , opsModel = opsModel
           , settingsModel = settingsModel
           , route = parseLocation location
+          , mdl = Material.model
           }
         , Cmd.batch
             [ Cmd.map HomeMsg homeCmd
             , Cmd.map OpsMsg opsCmd
             , Cmd.map CibMsg cibCmd
+            , Layout.sub0 Mdl
             ]
         )
 
@@ -90,6 +95,11 @@ update msg model =
         CibMsg msg ->
             updateCib msg model
 
+        Mdl message_ ->
+            let ( nmodel, ncmd) =
+                    Material.update Mdl message_ model
+             in
+                 (nmodel, ncmd, NoUpdate)
 
 updateHome : Model -> Home.Msg -> ( Model, Cmd Msg, TacoUpdate )
 updateHome model homeMsg =
@@ -114,13 +124,14 @@ updateOps msg model =
         , NoUpdate
         )
 
-updateCib : Cib.Msg -> Model -> ( Model, Cmd Msg, TacoUpdate)
+
+updateCib : Cib.Msg -> Model -> ( Model, Cmd Msg, TacoUpdate )
 updateCib msg model =
     let
         ( nextModel, cmd ) =
             Cib.update msg model.cibModel
     in
-        ( { model | cibModel = nextModel}
+        ( { model | cibModel = nextModel }
         , Cmd.map CibMsg cmd
         , NoUpdate
         )
@@ -138,8 +149,27 @@ updateSettings model settingsMsg =
         )
 
 
-view : Taco -> Model -> Html Msg
-view taco model =
+viewMaterial : Taco -> Model -> Html Msg
+viewMaterial taco model =
+    Layout.render Mdl
+        model.mdl
+        [
+          -- Layout.selectedTab model.selectedTab
+        -- , Layout.onSelectTab SelectTab
+         Layout.fixedHeader
+        ]
+        { header = []
+        , drawer = []
+        , tabs = ( [ text "tab1" ], [] )
+        , main = [ view1 taco model ]
+        }
+
+view = viewMaterial
+
+
+
+view1 : Taco -> Model -> Html Msg
+view1 taco model =
     let
         buttonStyles route =
             if model.route == route then
@@ -221,8 +251,15 @@ pageView taco model =
         ]
 
 
+
 --SUBSCRIPTTIONS
+
+
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
-        [ Sub.map CibMsg (Cib.sub model.cibModel) ]
+        [ Sub.map CibMsg (Cib.sub model.cibModel)
+        -- , Layout.subscriptions model.mdl
+        -- , .mdl >> Layout.subs Mdl
+        , Layout.subs Mdl model.mdl
+        ]
