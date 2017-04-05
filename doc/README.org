@@ -6,11 +6,12 @@
 remotedata.http use cases: [[../src/Try/ComplicateHttp.elm][ComplicateHttp.elm]]
 CLOSED: [2017-03-27 Mon 16:24]
 
-*** TODO finish complicate http request
+*** DONE finish complicate http request
+    CLOSED: [2017-04-05 Wed 16:34]
 i need to serialize some http requests.
 
-**** TODO make the flat kind realization. 
-SCHEDULED: <2017-03-28 Tue>
+**** DONE make the flat kind realization. 
+CLOSED: [2017-04-05 Wed 16:34] SCHEDULED: <2017-03-28 Tue>
 Yes, i am looking for a elegant way to chain a list off
 requests; the examples listed in website are all single
 http request.
@@ -23,9 +24,11 @@ Due to this situation, i think /remotedata/http/ is *over designed*
 to omit the elm task concept for asynchronous operations.
 <2017-03-28 Tue 11:23>
 
-**** TODO chain requests demo 
+**** DONE chain requests demo 
+     CLOSED: [2017-04-05 Wed 16:34]
    
-***** TODO {while condition} pattern http requests chain
+***** DONE {while condition} pattern http requests chain
+      CLOSED: [2017-04-05 Wed 16:34]
       i need to get a bunch of requests while response is legal.
 
       now i have:
@@ -68,7 +71,8 @@ i found this commit, thanks for git:
               , src stargazer.avatarUrl
 ``` 
 but, this compile warning is ambiguity.
-**** TODO core concept in RemoteData
+**** DONE core concept in RemoteData
+     CLOSED: [2017-04-05 Wed 16:34]
 It's very clearly that RemoteData is a abstraction of
 Model, not Cmd or Msg.
 
@@ -92,5 +96,9 @@ E = MC^2
 
 * elm packages
 ** ohanhi/remotedata-http
+** debois/elm-mdl
+   Material Design Language.
+*** UI Framwork
+   It is a ui designe framework of application layer.
 * special notice
 this project is based on [[https://github.com/ohanhi/elm-taco][taco]] skeleton project, really thanks.

@@ -16,6 +16,8 @@ import Types exposing (TacoUpdate(..), Taco, Translations)
 import Material
 import Material.Layout as Layout
 
+import Material.Scheme as Scheme
+import Material.Color as Color
 
 type alias Model =
     { cibModel : Cib.Model
@@ -151,7 +153,8 @@ updateSettings model settingsMsg =
 
 viewMaterial : Taco -> Model -> Html Msg
 viewMaterial taco model =
-    Layout.render Mdl
+   Scheme.topWithScheme Color.BlueGrey Color.DeepOrange
+    (Layout.render Mdl
         model.mdl
         [
           -- Layout.selectedTab model.selectedTab
@@ -163,6 +166,7 @@ viewMaterial taco model =
         , tabs = ( [ text "tab1" ], [] )
         , main = [ view1 taco model ]
         }
+    )
 
 view = viewMaterial
 
