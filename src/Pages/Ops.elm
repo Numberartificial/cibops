@@ -13,11 +13,13 @@ import Types exposing (TacoUpdate(..), Taco, Person, People, Commit, Stargazer)
 import Decoders
 import Bootstrap.Button as Button
 
+import Try.MaterialDemo as MD
 
 type alias Model =
     { commits : WebData (List Commit)
     , stargazers : WebData (List Stargazer)
     , people : WebData People
+    , mdmodel : MD.Model
     }
 
 
@@ -26,6 +28,7 @@ type Msg
     | HandleStargazers (WebData (List Stargazer))
     | HandlePeople (WebData People)
     | ReloadData
+    | HandleMD MD.Msg
 
 
 init : ( Model, Cmd Msg )
@@ -33,6 +36,7 @@ init =
     ( { commits = Loading
       , stargazers = Loading
       , people = Loading
+      , mdmodel = MD.model
       }
     , fetchData
     )
@@ -101,11 +105,19 @@ update msg model =
             , Cmd.none
             )
 
+        HandleMD mdMsg ->
+            let
+                (nextModel, nextCmd) =
+                    MD.update mdMsg model.mdmodel
+            in
+                ( { model | mdmodel = nextModel}, Cmd.map HandleMD nextCmd)
+
 
 view : Taco -> Model -> Html Msg
 view taco model =
     div []
-        [ Button.button [ Button.primary ] [ text "bootstrap" ]
+        [ Html.map HandleMD <| MD.view model.mdmodel
+        , Button.button [ Button.primary ] [ text "bootstrap" ]
         , Button.button [ Button.attrs [ styles actionButton, onClick ReloadData ], Button.info ] [ text "info" ]
         , a
             [ styles appStyles
