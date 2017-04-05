@@ -20,6 +20,11 @@ configPeople =
     }
 
 
+type alias Item =
+    { name : String
+    }
+
+
 type alias Person =
     { name : String
     }
@@ -27,6 +32,15 @@ type alias Person =
 type alias Corporation =
     { name : String
     }
+
+
+type alias Items =
+    { page : Int
+    , size : Int
+    , content : List Item
+    }
+
+
 
 type alias People =
     { page : Int
@@ -40,12 +54,24 @@ type alias Corporations =
     , content : List Corporation
     }
 
+decodeItem : Decoder Item 
+decodeItem =
+    decode  Item
+        |> required "name" string
+
+
+decodeItems : Decoder Items
+decodeItems =
+    decode Items
+        |> optional "page" int 0
+        |> optional "size" int 20
+        |> optional "content" (Json.Decode.list decodeItem) []
+
+
 decodePerson : Decoder Person
 decodePerson =
     decode Person
         |> required "name" string
-
-
 
 
 decodePeople : Decoder People

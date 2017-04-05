@@ -1,17 +1,22 @@
 module Pages.CibFetch exposing (..)
 
-import Http
+import Bootstrap.Button as Button exposing (..)
+import Bootstrap.Card as Card
+import Bootstrap.Dropdown as Dropdown exposing (..)
+import Bootstrap.Form.Input as Input
+import Bootstrap.Form.Checkbox as Checkbox
+import Bootstrap.Form as Form
+import Bootstrap.Badge as Badge
+import Effects.Web as Resource exposing (AuditList)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Task exposing (Task)
-import RemoteData.Http as Rest exposing (..)
+import Http
 import RemoteData exposing (RemoteData(..), WebData)
-import Bootstrap.Button as Button exposing (..)
-import Bootstrap.Dropdown as Dropdown exposing (..)
+import RemoteData.Http as Rest exposing (..)
+import Task exposing (Task)
 import Views.WebDataView as WebDataView
 import Views.WebListView as ListView
-import Effects.Web as Resource exposing (AuditList)
 
 
 -- MODEL
@@ -21,11 +26,57 @@ type alias Model =
     { drop : Dropdown.State
     , people : ListView.Model Resource.Person
     , audit : WebData AuditList
+    , filter : Filter
+    , items : List Item
+    }
+
+
+type alias Item =
+    { url : String
+    , host : String
+    , datasource : String
+    , itemName : String
+    , name : String
+    }
+
+
+type alias Filter =
+    { loaded : Bool
+    , lastUpdate : String
     }
 
 
 
 -- INIT
+
+
+initHost : String
+initHost =
+    "168.35.6.12:8099"
+
+
+initItem : String -> String -> String -> Item
+initItem host datasource itemName =
+    let
+        restName =
+            String.join "/" [ datasource, "api", itemName ]
+    in
+        { url = "http://" ++ host ++ restName
+        , host = host
+        , datasource = datasource
+        , itemName = itemName
+        , name = restName
+        }
+
+
+peopleString : String
+peopleString =
+    "people"
+
+
+corporationsString : String
+corporationsString =
+    "corporations"
 
 
 init : ( Model, Cmd Msg )
@@ -37,6 +88,20 @@ init =
         ( { drop = Dropdown.initialState
           , people = peopleModel
           , audit = NotAsked
+          , filter =
+                { loaded = True
+                , lastUpdate = ""
+                }
+          , items =
+                [ initItem initHost "aic" peopleString
+                , initItem initHost "aic" corporationsString
+                , initItem initHost "cbrc" corporationsString
+                , initItem initHost "shixin" peopleString
+                , initItem initHost "shixin" corporationsString
+                , initItem initHost "zhixing" peopleString
+                , initItem initHost "zhixing" corporationsString
+                , initItem initHost "zjcourt" corporationsString
+                ]
           }
         , Cmd.batch
             [ Cmd.map PeopleMsg peopleCmd ]
@@ -53,6 +118,12 @@ type Msg
     | PeopleMsg (ListView.Msg Resource.Person)
     | DropClick String String
     | HandleAudit (WebData AuditList)
+    | FilterMsg FilterChange
+
+
+type FilterChange
+    = Loaded Bool
+    | LastUpdate String
 
 
 mapWebData : (a -> b) -> WebData a -> WebData b
@@ -197,9 +268,35 @@ update msg model =
             updateList host source data (model)
 
         HandleAudit webData ->
-           ( { model | audit = webData}
-              , Cmd.none
+            ( { model | audit = webData }
+            , Cmd.none
             )
+
+        FilterMsg change ->
+            case change of
+                Loaded loaded ->
+                    let
+                        oldFilter =
+                            model.filter
+
+                        newFilter =
+                            { oldFilter | loaded = loaded }
+                    in
+                        ( { model | filter = newFilter }
+                        , Cmd.none
+                        )
+
+                LastUpdate date ->
+                    let
+                        oldFilter =
+                            model.filter
+
+                        newFilter =
+                            { oldFilter | lastUpdate = date }
+                    in
+                        ( { model | filter = newFilter }
+                        , Cmd.none
+                        )
 
 
 updateList : String -> String -> String -> Model -> ( Model, Cmd Msg )
@@ -214,7 +311,10 @@ updateList host source data model =
         countCmd =
             fetchCount url
     in
-        ( { model | people = nextModel }
+        ( { model
+            | people = nextModel
+            , audit = Loading
+          }
         , Cmd.batch
             [ Cmd.map PeopleMsg nextCmd
             , countCmd
@@ -243,16 +343,54 @@ view : Model -> Html Msg
 view model =
     div []
         [ viewDrop model
-        , Button.button
-            [ Button.primary
-            , Button.attrs
-                [ onClick (FetchPeople) ]
+        , viewFilter model
+        , br [] []
+        , Badge.badge []
+            [ Button.button
+                [ Button.primary
+                , Button.attrs
+                    [ onClick (FetchPeople) ]
+                ]
+                [ text "reload" ]
             ]
-            [ text "reload" ]
-        , WebDataView.simple (\audit -> text <| toString audit.total) model.audit
+        , viewAudit model
         , ListView.custom viewPerson
             model.people
         ]
+
+
+viewFilter : Model -> Html Msg
+viewFilter model =
+    Form.label []
+        [ text "filters"
+        , Checkbox.checkbox
+            [ Checkbox.checked True
+            , Checkbox.onCheck (FilterMsg << Loaded)
+            ]
+            "loaded"
+        , Input.text
+            [ Input.id "lastUpdate:"
+            , Input.small
+            , Input.defaultValue "2017/04/01T08:23:2324Z"
+            , Input.onInput (FilterMsg << LastUpdate)
+            ]
+        ]
+
+
+viewAudit : Model -> Html Msg
+viewAudit model =
+    Card.config [ Card.outlineInfo ]
+        |> Card.headerH1 [] [ text "Audit Info" ]
+        |> Card.footer [] [ text "End" ]
+        |> Card.block []
+            [ Card.titleH1 [] [ text "Block title" ]
+            , Card.text []
+                [ text "Total : "
+                , WebDataView.simple (\audit -> text <| toString audit.total) model.audit
+                ]
+            , Card.link [ href "#" ] [ text "MyLink" ]
+            ]
+        |> Card.view
 
 
 viewDrop : Model -> Html Msg
@@ -271,11 +409,20 @@ viewDrop model =
                 , Dropdown.buttonItem [ onClick <| (DropClick "aic" "people") ] [ text "Item 2" ]
                 , Dropdown.buttonItem [ onClick <| (DropClick "shixin" "people") ] [ text <| String.join "/" [ "shixin", "person" ] ]
                 , Dropdown.buttonItem [ onClick <| (DropClick "shixin" "corporations") ] [ text <| String.join "/" [ "shixin", "corporation" ] ]
-                , Dropdown.divider
-                , Dropdown.header [ text "Silly items" ]
-                , Dropdown.buttonItem [ class "disabled" ] [ text "DoNothing1" ]
-                , Dropdown.buttonItem [] [ text "DoNothing2" ]
                 ]
+                    ++ (List.map
+                            (\item ->
+                                Dropdown.buttonItem
+                                    [ onClick (DropClick item.datasource item.itemName) ]
+                                    [ text <| item.name ]
+                            )
+                            model.items
+                       )
+                    ++ [ Dropdown.divider
+                       , Dropdown.header [ text "Silly items" ]
+                       , Dropdown.buttonItem [ class "disabled" ] [ text "DoNothing1" ]
+                       , Dropdown.buttonItem [] [ text "DoNothing2" ]
+                       ]
             }
           -- etc
         ]
