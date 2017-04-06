@@ -2,54 +2,68 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgb79ce4d">1. plans</a>
+<li><a href="#org585123e">1. plans</a>
 <ul>
-<li><a href="#orgb3cf966">1.1. optimize page</a>
+<li><a href="#orgd4b4116">1.1. optimize page</a>
 <ul>
-<li><a href="#orge2346dd">1.1.1. <span class="done DONE">DONE</span> get familiar with RemoteData function</a></li>
-<li><a href="#org7be3eb4">1.1.2. <span class="done DONE">DONE</span> finish complicate http request</a></li>
+<li><a href="#orgb2b2d86">1.1.1. <span class="done DONE">DONE</span> get familiar with RemoteData function</a></li>
+<li><a href="#orge4c2761">1.1.2. <span class="done DONE">DONE</span> finish complicate http request</a></li>
 </ul>
 </li>
-<li><a href="#orga3ade0f">1.2. <span class="done DONE">DONE</span> outline</a>
+<li><a href="#org2619d80">1.2. <span class="done DONE">DONE</span> outline</a>
 <ul>
-<li><a href="#org02d2f15">1.2.1. yes it is outline</a></li>
+<li><a href="#orgcf9c56d">1.2.1. yes it is outline</a></li>
 </ul>
 </li>
-<li><a href="#org436c8c8">1.3. NEXT</a></li>
-<li><a href="#org9b2b100">1.4. <span class="todo TODO">TODO</span> get familiar with org mode</a>
+<li><a href="#orge6519c1">1.3. NEXT</a>
 <ul>
-<li><a href="#org8ec3ab4">1.4.1. <span class="todo TODO">TODO</span> todo org everyday</a></li>
-<li><a href="#org1158034">1.4.2. <span class="todo TODO">TODO</span> write more, think more, hesitate or choose less.</a></li>
+<li><a href="#orgfb56a08">1.3.1. Structural Optimize</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li><a href="#org4d44662">2. elm packages</a>
+<li><a href="#org30e97f9">1.4. <span class="todo TODO">TODO</span> get familiar with org mode</a>
 <ul>
-<li><a href="#org223175b">2.1. ohanhi/remotedata-http</a></li>
-<li><a href="#org06d708b">2.2. debois/elm-mdl</a>
-<ul>
-<li><a href="#org9c3676f">2.2.1. UI Framwork</a></li>
+<li><a href="#org6ce9552">1.4.1. <span class="todo TODO">TODO</span> todo org everyday</a></li>
+<li><a href="#orgb896560">1.4.2. <span class="todo TODO">TODO</span> write more, think more, hesitate or choose less.</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#org490aec1">3. special notice</a></li>
+<li><a href="#orgc45fc28">2. elm packages</a>
+<ul>
+<li><a href="#orgbe463bf">2.1. ohanhi/remotedata-http</a></li>
+<li><a href="#orgf09ab58">2.2. debois/elm-mdl</a>
+<ul>
+<li><a href="#orgedf1d26">2.2.1. UI Framwork</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org749ed61">3. work flow</a>
+<ul>
+<li><a href="#orgc7dfa86">3.1. project version control</a>
+<ul>
+<li><a href="#org3c7254d">3.1.1. git</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orge9fd319">4. special notice</a></li>
 </ul>
 </div>
 </div>
 
-<a id="orgb79ce4d"></a>
+
+<a id="org585123e"></a>
 
 # plans
 
 
-<a id="orgb3cf966"></a>
+<a id="orgd4b4116"></a>
 
 ## optimize page
 
 
-<a id="orge2346dd"></a>
+<a id="orgb2b2d86"></a>
 
 ### get familiar with RemoteData function
 
@@ -57,7 +71,7 @@ remotedata.http use cases: [ComplicateHttp.elm](../src/Try/ComplicateHttp.elm)
 CLOSED: <span class="timestamp-wrapper"><span class="timestamp">[2017-03-27 Mon 16:24]</span></span>
 
 
-<a id="org7be3eb4"></a>
+<a id="orge4c2761"></a>
 
 ### finish complicate http request
 
@@ -132,34 +146,43 @@ i need to serialize some http requests.
     Model, not Cmd or Msg.
 
 
-<a id="orga3ade0f"></a>
+<a id="org2619d80"></a>
 
 ## outline
 
 [github](https://github.com/Numberartificial/cibops)
 
 
-<a id="org02d2f15"></a>
+<a id="orgcf9c56d"></a>
 
 ### yes it is outline
 
 
-<a id="org436c8c8"></a>
+<a id="orge6519c1"></a>
 
 ## NEXT
 
 
-<a id="org9b2b100"></a>
+<a id="orgfb56a08"></a>
+
+### Structural Optimize
+
+1.  TODO from top to bottom
+
+2.  TODO no need to consider with reuse , need to abstract.
+
+
+<a id="org30e97f9"></a>
 
 ## get familiar with org mode
 
 
-<a id="org8ec3ab4"></a>
+<a id="org6ce9552"></a>
 
 ### [todo org](./orgman.md) everyday
 
-\#<a id="orgba15b96"></a>
-[锚点](#orgba15b96)
+\#<a id="org58f2fe9"></a>
+[锚点](#org58f2fe9)
 **bold**
 *italic*
 <del>delete</del>
@@ -169,36 +192,61 @@ E = MC<sup>2</sup>
 `git`
 
 
-<a id="org1158034"></a>
+<a id="orgb896560"></a>
 
 ### write more, think more, hesitate or choose less.
 
 
-<a id="org4d44662"></a>
+<a id="orgc45fc28"></a>
 
 # elm packages
 
 
-<a id="org223175b"></a>
+<a id="orgbe463bf"></a>
 
 ## ohanhi/remotedata-http
 
 
-<a id="org06d708b"></a>
+<a id="orgf09ab58"></a>
 
 ## debois/elm-mdl
 
 Material Design Language.
 
 
-<a id="org9c3676f"></a>
+<a id="orgedf1d26"></a>
 
 ### UI Framwork
 
 It is a ui designe framework of application layer.
 
 
-<a id="org490aec1"></a>
+<a id="org749ed61"></a>
+
+# work flow
+
+  i think it is a very important thing to improve and share the work
+flow of a project which i have not seen in other project, much dispointed me.
+
+
+<a id="orgc7dfa86"></a>
+
+## project version control
+
+i preffer git.
+
+
+<a id="org3c7254d"></a>
+
+### git
+
+\`\`\`shell 
+   git commit -a -m "this is commit info"
+   git push
+\`\`\` 
+
+
+<a id="orge9fd319"></a>
 
 # special notice
 

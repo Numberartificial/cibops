@@ -153,7 +153,7 @@ updateSettings model settingsMsg =
 
 viewMaterial : Taco -> Model -> Html Msg
 viewMaterial taco model =
-   Scheme.topWithScheme Color.BlueGrey Color.DeepOrange
+    Scheme.topWithScheme Color.Blue Color.DeepOrange
     (Layout.render Mdl
         model.mdl
         [

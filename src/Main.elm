@@ -21,22 +21,6 @@ main =
 
 
 
--- SUBSCRIPTIONS
-sub : Model -> Sub Msg
-sub model =
-    Sub.batch
-        [ Time.every Time.second TimeChange
-        , Sub.map RouterMsg (subRouter model) ]
-
-
-subRouter : Model -> Sub Router.Msg
-subRouter model =
-    case model.appState of
-        Ready taco routerModel ->
-            Router.subscriptions routerModel
-
-        NotReady _ ->
-            Sub.none
 
 -- MODEL
 
@@ -176,3 +160,21 @@ view model =
 
         NotReady _ ->
             text "Loading"
+
+
+-- SUBSCRIPTIONS
+sub : Model -> Sub Msg
+sub model =
+    Sub.batch
+        [ Time.every Time.second TimeChange
+        , Sub.map RouterMsg (subRouter model) ]
+
+
+subRouter : Model -> Sub Router.Msg
+subRouter model =
+    case model.appState of
+        Ready taco routerModel ->
+            Router.subscriptions routerModel
+
+        NotReady _ ->
+            Sub.none

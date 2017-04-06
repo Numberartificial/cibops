@@ -1,3 +1,9 @@
+#+TITLE: All About This Project
+#+AUTHOR: Numberartificial
+#+EMAIL: C05118006@vip.qq.com
+#+DESCRIPTION: this is a project, main for ELM frontend web application, but more about how to make a project.
+
+
 * plans
 ** optimize page
    SCHEDULED: <2017-03-31 Fri>
@@ -81,6 +87,10 @@ Model, not Cmd or Msg.
    [[https://github.com/Numberartificial/cibops][github]]
 *** yes it is outline
 ** NEXT 
+*** Structural Optimize
+**** TODO from top to bottom
+**** TODO no need to consider with reuse , need to abstract.
+
 ** TODO get familiar with org mode
 *** TODO [[./orgman.org][todo org]] everyday
 #<<anchor>>
@@ -100,5 +110,20 @@ E = MC^2
    Material Design Language.
 *** UI Framwork
    It is a ui designe framework of application layer.
+* work flow
+  i think it is a very important thing to improve and share the work
+flow of a project which i have not seen in other project, much dispointed me.
+** project version control
+   i preffer git.
+*** git
+    ```shell 
+       git commit -a -m "this is commit info"
+       git push
+    ``` 
+
+
+
+
+
 * special notice
 this project is based on [[https://github.com/ohanhi/elm-taco][taco]] skeleton project, really thanks.
